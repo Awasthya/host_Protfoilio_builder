@@ -12,7 +12,7 @@ require('../DB/Conn')
 router.use(cookieParser());
 router.get('/',(req,res)=>{
    // res.send('Hiii user')
-   comsole.log("hello Running");
+   console.log("hello Running");
 });
 router.post('/register',async(req,res)=>{
     
