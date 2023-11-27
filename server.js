@@ -13,6 +13,9 @@ const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV === "production") {
         app.use(express.static("clientt/build"));
 }
+app.get('*',function(req,res){
+        res.sendFile(path.join(__dirname, './clientt/build/index.html'))
+})
 app.listen(process.env.PORT,()=>{
         console.log('Server is Started....')
 })
