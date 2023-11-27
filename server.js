@@ -3,7 +3,8 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const app = express();
 const dotenv = require('dotenv');
-const router = require('./router/getrouter')
+const router = require('./router/getrouter');
+const path = require('path');
 require('./DB/Conn')
 //  const expressfileupload = require('express-fileupload');
 app.use(express.json())
