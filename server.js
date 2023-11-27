@@ -1,11 +1,13 @@
 const AuthenticationChecker = require('./middleware');
 const express = require('express') 
+const bodyParser = require('body-parser');
 const app = express();
 const dotenv = require('dotenv');
 const router = require('./router/getrouter')
 require('./DB/Conn')
+//  const expressfileupload = require('express-fileupload');
 app.use(express.json())
-app.use(require('./router/getrouter'))
+app.use(require('./router/getrouter'));
 const PORT = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV === "production") {

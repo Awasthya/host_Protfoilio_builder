@@ -1,0 +1,34 @@
+.title_content{
+    display:flex;
+    flex-direction: row;
+    align-content: space-between;
+}
+.card{
+    width:100%;
+    height:auto;
+    text-align: centers;
+}
+.outer{
+    padding:10px;
+    display : flex;
+    justify-content: row;
+}
+.demo1{
+    width:100%;
+}
+.adjust{
+    margin-left :10%;
+}
+.UpdateDelete{
+    display : flex;
+    justify-content: space-between;
+    flex-direction: row-reverse
+}
+@media only screen and (max-width: 769px) {
+    .outer{
+        padding:10px;
+        width:100%;
+    };
+    
+  }
+  

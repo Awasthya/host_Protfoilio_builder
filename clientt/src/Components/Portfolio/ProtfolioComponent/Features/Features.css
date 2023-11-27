@@ -1,0 +1,108 @@
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #ecf0f3;
+  }
+  .container {
+    width: 95%;
+    margin: 3%;
+    
+  }
+  .innercontainter{
+    height : 35vh;
+  }
+  a{
+    text-decoration: none;
+    color: black;
+  }
+ 
+
+
+.top {
+  margin-top: 80px;
+}
+.mtop {
+  margin-top: 40px;
+}
+.heading {
+  margin: 50px 0 50px 0;
+  text-align: center;
+}
+.heading h4 {
+  color: #ff014f;
+  letter-spacing: 2px;
+  font-weight: 400;
+}
+.heading h1 {
+  font-size: 60px;
+  color: #3c3e41;
+}
+
+.demo {
+  height :100px;
+  width : 100px;
+  position: absolute;
+}
+.Skillrow {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin-left:10%;
+}
+.text-center {
+  text-align: center;
+}
+.primary_color {
+  color: #ff014f;
+}
+.features .demo {
+    padding: 5px;
+    
+  }
+  .SkillLogo {
+    height :auto;
+    width: auto;
+  }
+  .skills{
+    margin-left: 5%;
+  margin-top: -3%;
+  }
+  .skill {
+    visibility: visible;
+    margin-right: 14%;
+    
+  }
+  .skilldeactivator{
+    visibility: hidden;
+  position: absolute;
+  }
+  .skillname{
+    text-align: center;
+  }
+
+  .skillright{
+    position: absolute;
+    z-index: 3;
+    margin-left : 73%;
+    margin-top : 3%;
+}
+ .skillleft{
+    
+    margin-left : 6%;
+    z-index: 3;
+    position: absolute;
+    margin-top :3%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 35px;
+}
+
+@media screen and (max-width:768){
+  .container {
+    width: 100%;
+    margin: 0;
+    
+  }
+}

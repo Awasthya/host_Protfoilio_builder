@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const aws = require('aws-sdk');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const PORT = process.env.PORT;
@@ -8,8 +10,32 @@ const token = require('jsonwebtoken');
 const cookieParser = require("cookie-parser");
 const { application } = require('express');
 const mongodb = require('mongodb')
+const uploadImage = require('../middleWare/uploadImage');;
 require('../DB/Conn')
 router.use(cookieParser());
+const multerS3 = require('multer-s3');
+const s3 = new aws.S3({
+    accessKeyId:process.env.S3_ACCESS_KEY,
+    secretAccessKey:process.env.S3_SECRET_ACCESS_KEY,
+    region:process.env.S3_BUKET_REGION
+})
+
+const upload = (bucketName) => 
+    
+     multer({
+        storage:multerS3({
+            s3,
+            bucket:bucketName,
+            key:function(req,file,cb){
+                const fileName = Date.now() + "_" + file.fieldname + "_" + file.originalname;
+                cb(null, fileName);
+            },
+        }),
+    });
+   
+exports.setProfile = async(req,res,next) => {
+    
+};
 router.get('/',(req,res)=>{
    // res.send('Hiii user')
 });
@@ -39,7 +65,16 @@ router.post('/register',async(req,res)=>{
         console.log(err);
     }
 });
+router.post('/profile',async(req,res) => {
+    const {searchid} = req.body;
+    const userExist = await User.findOne({ _id : searchid});
 
+    if(!userExist){
+        return res.status(422).json({Error : "Invalid credentials"})
+     }
+     console.log('Sucess');
+    res.status(200).json({ message: 'user contact sucessfully' });
+});
 router.post('/login',async(req,res)=>{
    // console.log('easy');
     const {email,password} = req.body;
@@ -52,7 +87,7 @@ router.post('/login',async(req,res)=>{
     try{
         let token; 
         const userExist = await User.findOne({ email: email });
-        
+       // console.log(userExist._id);
         if(!userExist){
            return res.status(422).json({Error : "Invalid credentials"})
         }
@@ -66,10 +101,8 @@ router.post('/login',async(req,res)=>{
         });
       
         if(isMatch){
-            console.log("Match");
-            res.status(201).json({message : "You are login "})
+            res.status(201).json({message : "You are login ",id : userExist._id})
         }else{
-            console.log("Not Match");
             return res.status(422).json({Error : "Invalid credentials"})
         }
         
@@ -229,6 +262,19 @@ router.get('/getdata/:id',authenticate, async (req, res) => {
         res.status(422).json(e); 
     }
 });
+router.get('/getId',authenticate, async (req, res) => {
+    try {
+                        //req.params
+                        console.log('hii');
+        const { id } = req.rootUser;
+        const userdata = await User.findOne({ _id: id });
+       // console.log(userdata);
+        const data = await userdata;
+        res.status(201).json(data);
+    } catch (e) {
+        res.status(422).json(e); 
+    }
+});
 router.get('/getExperience/:id',authenticate, async (req, res) => {
     try {
         const { id } = req.rootUser;
@@ -274,7 +320,20 @@ router.get('/Info',authenticate, (req,res)=>{
    // console.log(req.rootUser)
     res.send(req.rootUser);
 });
+router.post('/FetchInfoById',async(req,res) => {
+    try {
+                //req.params
+            const { id } = req.body.id;
+           // console.log(id);
+            const userdata = await User.findOne({ _id: id });
+            //console.log(userdata);
+            // console.log(data);
+            res.status(200).json(userdata);
+        } catch (e) {
+        res.status(422).json(e); 
+    }
 
+})
 router.get('/logout', (req, res) => {
     //console.log('hello my logout');
     res.clearCookie('jwtoken', { path: '/' });
@@ -290,18 +349,19 @@ router.get('/getdata',authenticate,(req,res)=>{
 
 router.post('/storeData',authenticate, async(req, res) => {
     const {email,header,input1,input2,input3,input4,input5,input6} = req.body;
+    console.log('Hiii');
     if(!input1 ){
         res.status(400).json( {message : "Please Fill the data properly"})
     }
     try{
-        
     const userExist = await User.findOne({_id : req.userId });
         if(!userExist){
             res.status(422).json({message : "User Not Exist"})
         }
+        
         let message;
-        if(header == 'personalInfo'){
-            message = await userExist.addpersonalInfo(input1, input2, input3, input4, input5,input6);
+        if(header === 'personalInfo'){
+            message = await userExist.addpersonalInfo(input1, input2, input3, input4, input5);
         } else if (header == 'education') {
             message = await userExist.addeducation( input1, input2, input3, input4, input5);
             
@@ -310,10 +370,10 @@ router.post('/storeData',authenticate, async(req, res) => {
             message = await userExist.addexperienceInfo( input1, input2, input3, input4, input5);
             
         }else if (header == 'Skills') {
-            message = await userExist.addskillInfo( input1, input2, input3);
+            message = await userExist.addskillInfo( input1,  input3);
             
         }else if (header == 'projectInfo') {
-            message = await userExist.addprojectInfo( input1, input2, input3,input4);
+            message = await userExist.addprojectInfo( input1, input2, input3,input4,input5);
             
         }
         console.log(header);
@@ -322,7 +382,28 @@ router.post('/storeData',authenticate, async(req, res) => {
     }catch(err){
         console.log(err);
     }
-})
+});
+
+router.post('/upload/profilePicture/:id', async (req,res) => {
+    
+    const uploadSingle = upload("awasthya-profile-picture-upload").single(
+        "AvatarprofileImage"
+        );
+    
+    uploadSingle(req,res,async(err) => {
+        if(err) return res.status(404).json({sucess : false, message : err.message})
+        //console.log(req.file.location);
+        const data = await User.updateOne({_id : req.params.id} , {
+            $set : {
+                "profilePicture" : req.file.location,
+                "profilePictureName" : req.file.key
+            }
+        })
+        res.status(200).json({data : req.file.location});
+    })
+
+    
+});
 module.exports = router;
 
 
