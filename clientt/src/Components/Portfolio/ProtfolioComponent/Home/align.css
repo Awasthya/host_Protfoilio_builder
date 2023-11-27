@@ -1,8 +1,0 @@
-.home-container{
-    display:flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height : 570px ; 
-    
-    background-image:url('../assets/Home/bg.jpg');
-}
