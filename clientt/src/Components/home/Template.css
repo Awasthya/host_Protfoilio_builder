@@ -1,0 +1,44 @@
+.template{
+    
+    cursor : pointer;
+    margin-top : 3%;
+    width : 70%;
+    height: 20%;
+}
+.slider{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    margin-left : 10%;
+}
+.templateImage{
+    
+    position: absolute;
+    height: 15%;
+    margin : 5%;
+}
+.right{
+    position: absolute;
+    z-index: 3;
+    margin-left : 69%;
+    margin-top : 7%;
+}
+ .left{
+    
+    margin-left : 5%;
+    z-index: 3;
+    position: absolute;
+    margin-top :7%;
+}
+.slide {
+    visibility: hidden;
+    transition-duration: 1s ease;
+  }
+  
+   .activee {
+    visibility:visible;
+    width : 40%;
+    transition-duration: 1s;
+    transform: scale(1.08);
+  }

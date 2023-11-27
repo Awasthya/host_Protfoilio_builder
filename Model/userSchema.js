@@ -6,6 +6,10 @@ const userSchema = new mongoose.Schema({
     name : {
         type : String,
         required : true
+    },profilePicture : {
+        type : String,
+    },profilePictureName : {
+        type : String,
     }, email : {
         type : String,
         required : true
@@ -54,12 +58,14 @@ const userSchema = new mongoose.Schema({
     }],skillInfo: [{
         skill: { type: String, require: true }  ,
         description: { type: String, require: true }  ,
-        certificateLink: { type: String, require: true }  
+        certificateLogoLink: { type: String, require: true } ,
+        certificateLink: { type: String, require: true } ,
     }],projectInfo: [{
         projectName: { type: String, require: true }  ,
         description: { type: String, require: true },
         title :{type: String, require: true},
-        Image: { type: String, require: true }  
+        Image: { type: String, require: true },
+        ProjectLink : {type:String}  
     }]
 });
 
@@ -84,6 +90,11 @@ userSchema.methods.generateAuthToken = async function () {
         console.log(e);
     }
    
+}
+userSchema.methods.uploadProfile = async (file) => {
+    this.profilePicture = file;
+    await this.save();
+    return this.profilePicture;
 }
 userSchema.methods.addpersonalInfo = async function (input1,input2,input3,input4,input5,input6) {
     try {
@@ -115,19 +126,19 @@ userSchema.methods.addexperienceInfo = async function (input1,input2,input3,inpu
         console.log(err);
     }
 }
-userSchema.methods.addskillInfo  = async function (input1,input2,input3) {
+userSchema.methods.addskillInfo  = async function (input1,input2) {
     try {
         console.log("Skills");
-        this.skillInfo = this.skillInfo.concat({ skill: input1, description: input2, certificateLink: input3});
+        this.skillInfo = this.skillInfo.concat({ skill: input1, certificateLogoLink: input2});
         await this.save();
         return this.skillInfo;
     } catch(err) {
         console.log(err);
     }
 }
-userSchema.methods.addprojectInfo = async function (input1,input2,input3,input4) {
+userSchema.methods.addprojectInfo = async function (input1,input2,input3,input4,input5) {
     try {
-        this.projectInfo = this.projectInfo.concat({ projectName: input1, description: input2, title: input3, Image: input4 });
+        this.projectInfo = this.projectInfo.concat({ projectName: input1, description: input2, title: input3, Image: input4, ProjectLink: input5 });
         await this.save();
         return this.projectInfo;
     } catch(err) {

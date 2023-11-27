@@ -1,0 +1,29 @@
+.Contact-pic{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height : 710px ; 
+       height:100%;
+       margin-bottom: 0%;
+        background-image:url("https://i.pinimg.com/originals/92/da/16/92da16089d9f2de8e29429d8ba89d267.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        text-align: center;
+}   
+.searchbar{
+    margin-top: 10%;
+    align-items: center;
+   display:flex;
+   justify-content: space-between;
+
+   flex-direction: column;
+}
+.searchbar input{
+    margin-top: 3%;;
+    width:30%;
+}
+h3{
+    width:50%;
+    color:white;
+}
