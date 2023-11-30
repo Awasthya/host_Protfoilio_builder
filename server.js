@@ -4,16 +4,23 @@ const bodyParser = require('body-parser');
 const app = express();
 const dotenv = require('dotenv');
 const router = require('./router/getrouter')
-require('./DB/Conn')
+const path = require('path');
+require('./DB/Conn');
+
 //  const expressfileupload = require('express-fileupload');
 app.use(express.json())
 app.use(require('./router/getrouter'));
 const PORT = process.env.PORT || 5000;
 
+app.use(express.static(path.join(__dirname, './clientt/build')));
+
+app.get('*',funcation = (req,res)=> {
+        res.sendFile(path.join(__dirname,'./clientt/build/index.html'))
+})
 if (process.env.NODE_ENV === "production") {
         app.use(express.static("clientt/build"));
 }
-app.listen(process.env.PORT,()=>{
+app.listen(PORT,()=>{
         console.log('Server is Started....')
 })
 /**
